@@ -1,0 +1,1 @@
+Practice excercises from https://projekty.pyladies.cz/course?course=online-2021-spring
