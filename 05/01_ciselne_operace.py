@@ -1,12 +1,11 @@
 # nějak mi přišlo, že tohle řešní bude lepší ve třídě, doufám, že to nevadí
-# za předchozí řešení od kolegů se omlouvám, to jsme nekonzultovali :-)
 
 class ZakladniKalkulacka():
 	def __init__(self):
 		self.operatori = {'+': lambda x, y: x + y,
-			 '-': lambda x, y: x - y,
-			 '*': lambda x, y: x * y,
-			 '/': lambda x, y: x / y}
+						  '-': lambda x, y: x - y,
+						  '*': lambda x, y: x * y,
+						  '/': lambda x, y: x / y}
 		self.spusteni_operace()
 		
 	def nacteni_cisel(self):
@@ -14,10 +13,10 @@ class ZakladniKalkulacka():
 			try:
 				input1 = int(input("Zadej první číslo: "))
 				input2 = int(input("Zadej druhé číslo: "))
+				return input1, input2
 			except ValueError:
 				print("Zadej číslo číslem brácho :-)")
-				break
-			return input1, input2
+			
 
 	def nacteni_operace(self):
 		while True:
@@ -34,6 +33,7 @@ class ZakladniKalkulacka():
 			print(f"Výsledek je: {self.operatori[operace](cislo1, cislo2)}")
 		except ZeroDivisionError:
 			print("Nulou dělit nelze! Takže výsledek nedostaneš!")
+
 		
 if __name__ == "__main__":
 	zakladnikalkulacka = ZakladniKalkulacka()
