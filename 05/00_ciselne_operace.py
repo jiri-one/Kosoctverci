@@ -1,39 +1,43 @@
-# nÄ›jak mi pÅ™iÅ¡lo, Å¾e tohle Å™eÅ¡nÃ­ bude lepÅ¡Ã­ ve tÅ™Ã­dÄ›, doufÃ¡m, Å¾e to nevadÃ­
-
 class ZakladniKalkulacka():
-	def __init__(self):
-		self.operatori = {'+': lambda x, y: x + y,
-						  '-': lambda x, y: x - y,
-						  '*': lambda x, y: x * y,
-						  '/': lambda x, y: x / y}
-		self.spusteni_operace()
-		
-	def nacteni_cisel(self):
-		while True:
-			try:
-				input1 = int(input("Zadej prvnÃ­ ÄÃ­slo: "))
-				input2 = int(input("Zadej druhÃ© ÄÃ­slo: "))
-				return input1, input2
-			except ValueError:
-				print("Zadej ÄÃ­slo ÄÃ­slem brÃ¡cho :-)")
-			
+    def __init__(self):
+        self.operatori = {'+': lambda x, y: x + y,
+                          '-': lambda x, y: x - y,
+                          '*': lambda x, y: x * y,
+                          '/': lambda x, y: x / y}
+        self.spusteni_operace()
 
-	def nacteni_operace(self):
-		while True:
-			operace = input("Zadej operaci: ")
-			if operace not in self.operatori.keys():
-				print('MusÃ­Å¡ zadat "+", "-", "*", "/", nic jinÃ©ho program neznÃ¡.')
-			else:
-				return operace
+    def nacteni_input1(self):
+        while True:
+            try:
+                input1 = int(input("Zadej první èíslo: "))
+                return input1
+            except ValueError:
+                print("Zadej èíslo èíslem brácho :-)")
+    
+    def nacteni_input2(self):
+        while True:
+            try:
+                input2 = int(input("Zadej druhé èíslo: "))
+                return input2
+            except ValueError:
+                print("Zadej èíslo èíslem brácho :-)")
+                
+    def nacteni_operace(self):
+        while operace := input("Zadej operaci: "):
+            try:
+                self.operatori[operace]
+                return operace
+            except KeyError:
+                print(f'Musíš zadat {str(self.operatori.keys())[11:-2]}, nic jiného program nezná.')
 
-	def spusteni_operace(self):
-		cislo1, cislo2 = self.nacteni_cisel()
-		operace = self.nacteni_operace()
-		try:
-			print(f"VÃ½sledek je: {self.operatori[operace](cislo1, cislo2)}")
-		except ZeroDivisionError:
-			print("Nulou dÄ›lit nelze! TakÅ¾e vÃ½sledek nedostaneÅ¡!")
+    def spusteni_operace(self):
+        cislo1, cislo2 = self.nacteni_input1(), self.nacteni_input2()
+        operace = self.nacteni_operace()
+        try:
+            print(f"Vısledek je: {self.operatori[operace](cislo1, cislo2)}")
+        except ZeroDivisionError:
+            print("Nulou dìlit nelze! Take vısledek nedostaneš!")
 
-		
+
 if __name__ == "__main__":
-	zakladnikalkulacka = ZakladniKalkulacka()
+    zakladnikalkulacka = ZakladniKalkulacka()
