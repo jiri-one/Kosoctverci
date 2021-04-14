@@ -62,7 +62,8 @@ def tah_pocitace(pole, symbol):
         except ValueError:
             pass
 
-def piskvorky1d(herni_pole):
+def piskvorky1d():
+    herni_pole = "-" * 20
     if len(herni_pole) == 20 and isinstance(herni_pole, str) and match("^[-xo]*$", herni_pole) is not None:
         while hracuv_symbol := input("Jaký symbol chceš mít? x nebo o? "):
             if hracuv_symbol == "x":
@@ -90,4 +91,4 @@ def piskvorky1d(herni_pole):
     else:
         raise ValueError("Špatné hrací pole! Spusť hru znovu!")
         
-piskvorky1d("x-x-x-x-x-x-x-------")
+piskvorky1d()
