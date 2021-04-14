@@ -12,7 +12,6 @@ def vyhodnot(hraci_pole):
     else:
         return "-"
 
-
 def tah(hraci_pole, index, symbol):
     """Vrátí herní pole s daným symbolem umístěným na danou pozici:
     `hraci_pole` je herní pole, na které se hraje.
@@ -58,11 +57,10 @@ def tah_pocitace(pole, symbol):
     print("Teď táhne počítač.")
     while index_pocitace := randint(0,19):
         try:
-            nove_herni_pole = tah(pole, index_pocitace, symbol)
+            nove_herni_pole = tah(pole, int(index_pocitace), symbol)
             return nove_herni_pole
         except ValueError:
             pass
-
 
 def piskvorky1d(herni_pole):
     if len(herni_pole) == 20 and isinstance(herni_pole, str) and match("^[-xo]*$", herni_pole) is not None:
@@ -90,6 +88,6 @@ def piskvorky1d(herni_pole):
         elif vyhodnot(herni_pole) == "!":
             print("Remíza proti nejlepšímu počítači se taky počítá!")
     else:
-        raise ValueError("Špatné hrací pole! Spusť hru znovu!")  
+        raise ValueError("Špatné hrací pole! Spusť hru znovu!")
         
 piskvorky1d("x-x-x-x-x-x-x-------")
