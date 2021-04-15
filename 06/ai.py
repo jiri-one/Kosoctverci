@@ -8,9 +8,15 @@ def tah_pocitace(pole, symbol):
     nebo za kolečka.
     """
     print("Teď táhne počítač.")
-    while index_pocitace := randint(0,19):
+    if "-" not in pole:
+        raise ValueError("Pole je plně obsazené!")
+    while True:
+        index_pocitace = randint(0,19)
+        print(index_pocitace)
         try:
-            nove_herni_pole = tah(pole, int(index_pocitace), symbol)
+            nove_herni_pole = tah(pole, index_pocitace, symbol)
             return nove_herni_pole
-        except ValueError:
-            pass
+        except ValueError as error:
+            print(error)
+
+print(tah_pocitace('-xoxoxoxoxoxoxoxoxox', 'o'))
