@@ -18,5 +18,3 @@ def tah_pocitace(pole, symbol):
             return nove_herni_pole
         except ValueError as error:
             print(error)
-
-print(tah_pocitace('-xoxoxoxoxoxoxoxoxox', 'o'))
