@@ -27,9 +27,12 @@ def strategie_ai(pole, symbol):
                 # případně vyberu variantu, kdy má volno 2x vpravo a 1x vlevo
                 elif pole[index+2] == "-" and pole[index+1] == "-" and pole[index-1]  == "-":
                     return choice([index+2, index+1, index-1])
-                # případně vyberu variantu, kdy má volno 2x vpravo nebo 2x vlevo
-                elif (pole[index+2] == "-" and pole[index+1] == "-") or (pole[index-2] == "-" and pole[index-1] == "-"):
-                    return choice([index+2, index+1, index+2, index-1])
+                # případně vyberu variantu, kdy má volno 2x vpravo
+                elif pole[index+2] == "-" and pole[index+1] == "-":
+                    return choice([index+2, index+1])
+                # případně vyberu variantu, kdy má volno 2x vlevo
+                elif pole[index-2] == "-" and pole[index-1] == "-":
+                    return choice([index-2, index-1])
                 else:
                     return randint(0,19)
                 indexes.remove(index)
