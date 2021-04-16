@@ -24,12 +24,12 @@ def strategie_ai(pole, symbol):
                 if pole[index-2] == "-" and pole[index+2] == "-" and pole[index-1] == "-" and pole[index+1] == "-":
                     return choice([index-2, index-1, index+2, index+1])
                 # případně vyberu variantu, kdy má volno 2x vlevo a 1x vpravo
-                elif pole[index-2] == "-" and pole[index-1] == "-" and pole[index+1]:
+                elif pole[index-2] == "-" and pole[index-1] == "-" and pole[index+1] == "-":
                     return choice([index-2, index-1, index+1])
                 # případně vyberu variantu, kdy má volno 2x vpravo a 1x vlevo
-                elif pole[index+2] == "-" and pole[index+1] == "-" and pole[index-1]:
+                elif pole[index+2] == "-" and pole[index+1] == "-" and pole[index-1]  == "-":
                     return choice([index+2, index+1, index-1])
-            except ValueError:
+            except IndexError:
                 pass
     # 4. jinak umístím symbol kamkoliv, jako v původní verzi
     else:
