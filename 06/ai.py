@@ -15,10 +15,8 @@ def strategie_ai(pole, symbol):
     # 3. můžu si udělat další další svůj symbol vedle už jednoho svého symbolu
     if symbol in pole:
         indexes = [index for index, char in enumerate(pole) if char == symbol] # udělám seznam indexů, kam už táhl
-        while True:
+        while indexes:
             index = choice(indexes) # vyberu náhodně jeden index, kam by chtěl táhnout
-            if len(indexes) > 1: # pokud je tam pořád víc míst, kam by mohl táhnout, ...
-                indexes.remove(index) # ... tak rovnou odeberu ten jeden, se kterým to zkouší teď
             try:
                 # vyberu tu ideální variantu, kdy má na obě strany volná dvě políčka
                 if pole[index-2] == "-" and pole[index+2] == "-" and pole[index-1] == "-" and pole[index+1] == "-":
@@ -29,6 +27,12 @@ def strategie_ai(pole, symbol):
                 # případně vyberu variantu, kdy má volno 2x vpravo a 1x vlevo
                 elif pole[index+2] == "-" and pole[index+1] == "-" and pole[index-1]  == "-":
                     return choice([index+2, index+1, index-1])
+                # případně vyberu variantu, kdy má volno 2x vpravo nebo 2x vlevo
+                elif (pole[index+2] == "-" and pole[index+1] == "-") or (pole[index-2] == "-" and pole[index-1] == "-"):
+                    return choice([index+2, index+1, index+2, index-1])
+                else:
+                    return randint(0,19)
+                indexes.remove(index)
             except IndexError:
                 pass
     # 4. jinak umístím symbol kamkoliv, jako v původní verzi
