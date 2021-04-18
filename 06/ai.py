@@ -12,7 +12,7 @@ def strategie_ai(pole, symbol):
     if "-" + 2 * hrace in pole: return pole.index("-" + 2 * hrace) # blokuje hráče, pokud má např. -xx
     elif 2 * hrace + "-" in pole: return pole.index(2 * hrace + "-") + 2 # blokuje hráče, pokud má např. xx-
     elif hrace + "-" + hrace in pole: return pole.index(hrace + "-" + hrace) # blokuje hráče, pokud má např. x-x
-    # 3. můžu si udělat další další svůj symbol vedle už jednoho svého symbolu
+    # 3. můžu si udělat další další svůj symbol vedle (nebo ob jeden) už jednoho svého symbolu
     if symbol in pole:
         indexes = [index for index, char in enumerate(pole) if char == symbol] # udělám seznam indexů, kam už táhl
         while indexes:
