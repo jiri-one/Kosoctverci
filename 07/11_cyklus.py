@@ -1,17 +1,16 @@
 def pohyb(seznam_souradnic: list, smer: str):
     radek, sloupec = seznam_souradnic[-1]
-    if smer == "s":
-        novy_radek = radek - 1
-        seznam_souradnic.append((novy_radek, sloupec))
-    elif smer == "j":
-        novy_radek = radek + 1
-        seznam_souradnic.append((novy_radek, sloupec))
-    elif smer == "z":
-        novy_sloupec = sloupec - 1
-        seznam_souradnic.append((radek, novy_sloupec))
-    elif smer == "v":
-        novy_sloupec = sloupec + 1
-        seznam_souradnic.append((radek, novy_sloupec))
+    if smer == "s": radek = radek - 1
+    elif smer == "j": radek = radek + 1
+    elif smer == "z": sloupec = sloupec - 1
+    elif smer == "v": sloupec = sloupec + 1
+    
+    if (radek, sloupec) in seznam_souradnic or radek < 0 or radek > 9 or sloupec < 0 or sloupec > 9:
+        raise ValueError('Game over')
+    else:
+        seznam_souradnic.append((radek, sloupec))
+        seznam_souradnic.pop(0)
+
 
 def nakresli_mapu(seznam_souradnic: list):
     for radek in range(10):
