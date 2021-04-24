@@ -32,15 +32,12 @@ def zapas_robotu():
             return 1, 0
         elif vitezna_barva == "Modří":
             return 0, 1
-        
-
-zapas_robotu()
 
 body_cerveni, body_modri = 0, 0
 for zapas in range(100):
     novy_bod_cerveni, novy_bod_modri = zapas_robotu()
     body_cerveni = body_cerveni + novy_bod_cerveni
-    body_modri = body_modri + novy_bod_cerveni
+    body_modri = body_modri + novy_bod_modri
 
 print(f"Červení dosáhli na score {body_cerveni}. Gratulujeme.")
 print(f"Modří dosáhli na score {body_modri}. Gratulujeme.")
