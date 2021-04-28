@@ -58,6 +58,20 @@ def porovnej_karty(karta_a, karta_b):
     else: # tohle by tady v zásadě asi nemuselo být :)
         return None
     
-# testy
-karty = vytvor_balicek()
-print(porovnej_karty(karty[10], karty[20]))
+def rozdej_balicky():
+    """Rozdá trojici balíčků: dva pro hráče a jeden pro "stůl"
+
+    Připraví zamíchaný balíček všech karet.
+    Balíček pro hráče A bude jeho první polovina; balíček pro hráče B druhá
+    """
+    balicek = vytvor_balicek()
+
+    # "polovina" musí být celé číslo, protože pak jí číslujeme seznam.
+    # Proto celočíselné dělení. Zbytek po dělení ignorujeme.
+    polovina = len(balicek) // 2
+
+    balicek_a = balicek[:polovina]
+    balicek_b = balicek[polovina:]
+
+    return balicek_a, balicek_b, []
+
