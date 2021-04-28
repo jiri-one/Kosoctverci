@@ -49,9 +49,11 @@ def porovnej_karty(karta_a, karta_b):
     * 'B', je-li lepší karta_b,
     * None, mají-li stejnou hodnotu.
     """
-    if karta_a[0] > karta_b[0]:
+    hodnota_a, barva_a = karta_a
+    hodnota_b, barva_b = karta_b
+    if hodnota_a > hodnota_b:
         return "A"
-    elif karta_a[0] < karta_b[0]:
+    elif hodnota_a < hodnota_b:
         return "B"
     else: # tohle by tady v zásadě asi nemuselo být :)
         return None
