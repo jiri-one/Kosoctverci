@@ -75,14 +75,33 @@ def rozdej_balicky():
 
     return balicek_a, balicek_b, []
 
-from itertools import zip_longest
+def vyloz_karty(balicky):
+    """Vyloží karty obou hráčů na stůl.
 
-def balicky_hezky():
-    print("Hráč A\t Hráč B")
+    "balicky" je trojice: balíček hráče A, balíček hráče B, karty na stole.
+
+    Každý z hráčů vyloží poslední kartu svého balíčku na stůl.
+    Nemá-li hráč co vyložit, nastane výjimka `SystemExit`.
+    (To zjednodušuje zbytek hry.)
+
+    Funkce vypisuje co dělá pomocí "print".
+    (To taky zjednodušuje zbytek hry.)
+    """
+    balicek_a, balicek_b, na_stole = balicky
+    try:
+        karta_a = balicek_a.pop()
+    except IndexError:
+        raise SystemExit('Hráč B vyhrál')
+    try:
+        karta_b = balicek_b.pop()
+    except IndexError:
+        raise SystemExit('Hráč A vyhrál')
+    print(f"Hráč A hraje kartu {popis_kartu(karta_a)}")
+    print(f"Hráč B hraje kartu {popis_kartu(karta_b)}")
+    na_stole.append(karta_a)
+    na_stole.append(karta_b)
+
+def valka():
     balicek_a, balicek_b, stul = rozdej_balicky()
-    for karta_a, karta_b in zip_longest(balicek_a, balicek_b, fillvalue=' '):
-        karta_popsana_a, karta_popsana_b = popis_kartu(karta_a), popis_kartu(karta_b), 
-        print(f"{karta_popsana_a}\t\t {karta_popsana_b}")
-
-balicky_hezky()
-
+    while True:
+        vyloz_karty((balicek_a, balicek_b, stul))
