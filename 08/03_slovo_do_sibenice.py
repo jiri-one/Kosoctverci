@@ -4,7 +4,7 @@ from random import randint
 def slovo_do_sibenice_ze_souboru(jmeno_souboru: str):
     with open(jmeno_souboru, encoding="utf-8") as file:
         lines = file.readlines()
-        return lines[randint(0, len(lines)-1)]
+        return lines[randint(0, len(lines)-1)].rstrip()
 
 slovo = slovo_do_sibenice_ze_souboru("soubor.txt")
 
