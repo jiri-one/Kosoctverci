@@ -105,3 +105,9 @@ def valka():
     balicek_a, balicek_b, stul = rozdej_balicky()
     while True:
         vyloz_karty((balicek_a, balicek_b, stul))
+        while porovnej_karty(stul[-1], stul[-2]) == None:
+            print("Válka!")
+            vyloz_karty((balicek_a, balicek_b, stul))
+            vyloz_karty((balicek_a, balicek_b, stul))
+            vyloz_karty((balicek_a, balicek_b, stul))
+        
