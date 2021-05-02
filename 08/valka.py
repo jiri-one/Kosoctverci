@@ -91,23 +91,37 @@ def vyloz_karty(balicky):
     try:
         karta_a = balicek_a.pop()
     except IndexError:
-        raise SystemExit('Hráč B vyhrál')
+        raise SystemExit('Hráč B vyhrál!')
     try:
         karta_b = balicek_b.pop()
     except IndexError:
-        raise SystemExit('Hráč A vyhrál')
+        raise SystemExit('Hráč A vyhrál!')
     print(f"Hráč A hraje kartu {popis_kartu(karta_a)}")
-    print(f"Hráč B hraje kartu {popis_kartu(karta_b)}")
     na_stole.append(karta_a)
+    print(f"Hráč B hraje kartu {popis_kartu(karta_b)}")
     na_stole.append(karta_b)
 
 def valka():
     balicek_a, balicek_b, stul = rozdej_balicky()
-    while True:
-        vyloz_karty((balicek_a, balicek_b, stul))
-        while porovnej_karty(stul[-1], stul[-2]) == None:
-            print("Válka!")
+    try:
+        while True:
             vyloz_karty((balicek_a, balicek_b, stul))
-            vyloz_karty((balicek_a, balicek_b, stul))
-            vyloz_karty((balicek_a, balicek_b, stul))
-        
+            while porovnej_karty(stul[-2], stul[-1]) == None:
+                print("Válka!")
+                vyloz_karty((balicek_a, balicek_b, stul))
+                vyloz_karty((balicek_a, balicek_b, stul))
+                vyloz_karty((balicek_a, balicek_b, stul))
+            vitez = porovnej_karty(stul[-2], stul[-1])
+            print(f"V tomto kole vyhrává hráč {vitez}!")
+            print(f"Hráč {vitez} bere {len(stul)} karet!")
+            if vitez == "A":
+                for karta_na_zacatek in stul:
+                    balicek_a.insert(0, karta_na_zacatek)
+            elif vitez == "B":
+                for karta_na_zacatek in stul:
+                    balicek_b.insert(0, karta_na_zacatek)      
+            stul = list()
+    except SystemExit as absolutni_vitez:
+        print(absolutni_vitez)
+# test
+valka()
