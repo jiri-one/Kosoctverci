@@ -15,8 +15,5 @@ with open("basnicka.txt", encoding="utf-8") as soubor:
     for radek in soubor:
         radek = reversed(radek.rstrip())
         for pismeno in radek:
-            if pismeno in preklad:
-                print(preklad[pismeno], end="")
-            else:
-                print(pismeno, end="")
+            print(preklad.get(pismeno, pismeno), end="")
         print()
