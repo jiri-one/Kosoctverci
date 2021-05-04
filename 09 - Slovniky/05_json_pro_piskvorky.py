@@ -1,6 +1,35 @@
+# verze piskvorek v jednom souboru pro lepší možnost testování
+
 from re import match
 from random import randint, choice
+import json # mimochodem, za import celých modulů jsem byl v začátcích kurzu "peskován" :-DD
+import os # a nyní je to ve vzorech :-D
 
+# toto je nová funkce pro ukládání hry
+def uloz_stav_hry(pole):
+    with open("stav_hry.json", "w") as stav_hry:
+        pole_json = json.dumps(pole)
+        print(pole_json, file=stav_hry)
+
+# toto je nová funkce pro načítání stavu hry
+def nacti_stav_hry():
+    try:
+        with open("stav_hry.json") as nacteny_stav_hry:
+            stav_hry_json = nacteny_stav_hry.read()
+            stav_hry = json.loads(stav_hry_json)
+            print("Našel jsem uložený stav hry, takže v ní pokračuji.\nSuper je, že když vybereš jiný znak než minule,\ntak můžeš pokračovat jako počítač :-D")
+            print("Pokračuj ve hře na tomto poli:\n", stav_hry)
+            return stav_hry
+    except FileNotFoundError:
+        nove_herni_pole = "-" * 20
+        return nove_herni_pole
+
+# toto je nová funkce pro smazání stavu hry při jejím úspěšném ukončení
+def smazani_souboru_se_stavem_hry():
+    try:
+        os.remove("stav_hry.json")
+    except FileNotFoundError:
+        pass # vyjímka ošetřena, ale nic nedělá, protože pokud tam soubor není, tak je vlastně hotovo :-)
 
 def tah(hraci_pole, index, symbol):
     """Vrátí herní pole s daným symbolem umístěným na danou pozici:
@@ -114,7 +143,7 @@ def tah_pocitace(pole, symbol):
             print(error)
 
 def piskvorky1d():
-    herni_pole = "-" * 20
+    herni_pole = nacti_stav_hry() # !!! toto je nové načtení herního pole !!!
     if len(herni_pole) == 20 and isinstance(herni_pole, str) and match("^[-xo]*$", herni_pole) is not None:
         while hracuv_symbol := input("Jaký symbol chceš mít? x nebo o? "):
             if hracuv_symbol == "x":
@@ -128,6 +157,7 @@ def piskvorky1d():
         while True:
             try:
                 herni_pole = tah_hrace(herni_pole, hracuv_symbol)
+                uloz_stav_hry(herni_pole) # !!! přidán tento řádek !!!
                 if vyhodnot(herni_pole) != "-": break
                 herni_pole = tah_pocitace(herni_pole, symbol_pocitace)
                 if vyhodnot(herni_pole) != "-": break
@@ -139,6 +169,7 @@ def piskvorky1d():
             print("Promiň hráči, vyhrál počítač. Ale i jemu gratulujeme.")
         elif vyhodnot(herni_pole) == "!":
             print("Remíza proti nejlepšímu počítači se taky počítá!")
+        smazani_souboru_se_stavem_hry() # !!! přidán tento řádek pro smazání stavu !!!
     else:
         raise ValueError("Špatné hrací pole! Spusť hru znovu!")
 
