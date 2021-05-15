@@ -81,6 +81,75 @@ class Vez(Figurka):
         else:
             raise ValueError(f'Musí se hýbat po řádku nebo sloupci')
 
+class Kun(Figurka):
+    def __init__(self, strana):
+        super().__init__(strana, 'kun')
+
+    def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
+        # (viz dokumentační řetězec v nadtřídě.)
+
+        # Nejdřív proveď ověření, která jsou společné všem figurkám
+        super().over_tah(sachovnice, puvodni_pozice, nova_pozice)
+
+        # Rozložení pozic (radek, sloupec) na čísla
+        puvodni_radek, puvodni_sloupec = puvodni_pozice
+        novy_radek, novy_sloupec = nova_pozice
+
+
+        if (abs(novy_radek - puvodni_radek) == 2 and  abs(novy_sloupec - puvodni_sloupec) == 1) or (abs(novy_radek - puvodni_radek) == 1 and  abs(novy_sloupec - puvodni_sloupec) == 2):
+            pass
+        else:
+            raise ValueError(f'Musí se hýbat pouze po trajektorii písmene L a nožička musí být 2 pole dlouhá :-)')
+        
+class Kral(Figurka):
+    def __init__(self, strana):
+        super().__init__(strana, 'kral')
+
+    def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
+        # (viz dokumentační řetězec v nadtřídě.)
+
+        # Nejdřív proveď ověření, která jsou společné všem figurkám
+        super().over_tah(sachovnice, puvodni_pozice, nova_pozice)
+
+        # Rozložení pozic (radek, sloupec) na čísla
+        puvodni_radek, puvodni_sloupec = puvodni_pozice
+        novy_radek, novy_sloupec = nova_pozice
+
+
+        if abs(novy_radek - puvodni_radek) > 1 or abs(novy_sloupec - puvodni_sloupec) > 1:
+            raise ValueError(f'Král dál než o jedno políčko nemůže.')   
+        else:
+            pass
+
+class Strelec(Figurka):
+    def __init__(self, strana):
+        super().__init__(strana, 'strelec')
+
+    def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
+        # (viz dokumentační řetězec v nadtřídě.)
+
+        # Nejdřív proveď ověření, která jsou společné všem figurkám
+        super().over_tah(sachovnice, puvodni_pozice, nova_pozice)
+
+        # Rozložení pozic (radek, sloupec) na čísla
+        puvodni_radek, puvodni_sloupec = puvodni_pozice
+        novy_radek, novy_sloupec = nova_pozice
+        citac_radku = 1 # jde nahoru
+        citac_sloupce = 1 # jde vpravo
+        if abs(novy_radek - puvodni_radek) == abs(novy_sloupec - puvodni_sloupec):
+            if novy_radek - puvodni_radek < 0: # jde dolu
+                citac_radku = -1
+            if novy_sloupec - puvodni_sloupec < 0: # jde vlevo
+                citac_sloupce = -1            
+            
+            for radek, sloupec in zip(range(puvodni_radek+citac_radku, novy_radek+citac_radku,citac_radku), range(puvodni_sloupec+citac_sloupce,novy_sloupec+citac_sloupce,citac_sloupce)):
+                    testovana_pozice = radek, sloupec
+                    print(testovana_pozice)
+                    blokujici = sachovnice.figurka_na(testovana_pozice)
+                    if blokujici != None:
+                        raise ValueError(f'V cestě je {blokujici}') 
+        else:
+            raise ValueError(f'Střelec může vždy pouze diagonálně.') 
 
 class Sachovnice:
     def __init__(self):
@@ -89,12 +158,12 @@ class Sachovnice:
         self.figurky = {}
 
         self.pridej((0, 0), Vez('bily'))
-        self.pridej((0, 1), Figurka('bily', 'kun'))
-        self.pridej((0, 2), Figurka('bily', 'strelec'))
+        self.pridej((0, 1), Kun('bily'))
+        self.pridej((0, 2), Strelec('bily'))
         self.pridej((0, 3), Figurka('bily', 'dama'))
-        self.pridej((0, 4), Figurka('bily', 'kral'))
-        self.pridej((0, 5), Figurka('bily', 'strelec'))
-        self.pridej((0, 6), Figurka('bily', 'kun'))
+        self.pridej((0, 4), Kral('bily'))
+        self.pridej((0, 5), Strelec('bily'))
+        self.pridej((0, 6), Kun('bily'))
         self.pridej((0, 7), Vez('bily'))
 
         self.pridej((1, 0), Figurka('bily', 'pesec'))
@@ -116,12 +185,12 @@ class Sachovnice:
         self.pridej((6, 7), Figurka('cerny', 'pesec'))
 
         self.pridej((7, 0), Vez('cerny'))
-        self.pridej((7, 1), Figurka('cerny', 'kun'))
-        self.pridej((7, 2), Figurka('cerny', 'strelec'))
+        self.pridej((7, 1), Kun('cerny'))
+        self.pridej((7, 2), Strelec('cerny'))
         self.pridej((7, 3), Figurka('cerny', 'dama'))
-        self.pridej((7, 4), Figurka('cerny', 'kral'))
-        self.pridej((7, 5), Figurka('cerny', 'strelec'))
-        self.pridej((7, 6), Figurka('cerny', 'kun'))
+        self.pridej((7, 4), Kral('cerny'))
+        self.pridej((7, 5), Strelec('cerny'))
+        self.pridej((7, 6), Kun('cerny'))
         self.pridej((7, 7), Vez('cerny'))
 
     def figurka_na(self, pozice):
