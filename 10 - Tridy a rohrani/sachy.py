@@ -151,6 +151,64 @@ class Strelec(Figurka):
         else:
             raise ValueError(f'Střelec může vždy pouze diagonálně.') 
 
+class Dama(Figurka):
+    def __init__(self, strana):
+        super().__init__(strana, "dama")
+
+    def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
+        # (viz dokumentační řetězec v nadtřídě.)
+        # Nejdřív proveď ověření, která jsou společné všem figurkám
+        super().over_tah(sachovnice, puvodni_pozice, nova_pozice)
+        # Rozložení pozic (radek, sloupec) na čísla
+        puvodni_radek, puvodni_sloupec = puvodni_pozice
+        novy_radek, novy_sloupec = nova_pozice
+        
+        if puvodni_radek == novy_radek:
+            # Věž se pohybuje "horizontálně", po řádku.
+            # Potřebujeme `range` s čísly sloupců, které tím věž přeskočí.
+            if puvodni_sloupec < novy_sloupec:
+                # věž jde doprava
+                preskocene_sloupce = range(puvodni_sloupec+1, novy_sloupec)
+            else:
+                # věž jde doleva
+                preskocene_sloupce = range(novy_sloupec+1, puvodni_sloupec)
+            # Na žádném z přeskočených políček nesmí být figurka:
+            for sloupec in preskocene_sloupce:
+                testovana_pozice = puvodni_radek, sloupec
+                blokujici = sachovnice.figurka_na(testovana_pozice)
+                if blokujici != None:
+                    raise ValueError(f'V cestě je {blokujici}')
+        elif puvodni_sloupec == novy_sloupec:
+            # Podobně pohyb "vertikálně"
+            if puvodni_radek < novy_radek:
+                preskocene_radky = range(puvodni_radek+1, novy_radek)
+            else:
+                preskocene_radky = range(novy_radek+1, puvodni_radek)
+            for radek in preskocene_radky:
+                testovana_pozice = radek, puvodni_sloupec
+                blokujici = sachovnice.figurka_na(testovana_pozice)
+                if blokujici != None:
+                    raise ValueError(f'V cestě je {blokujici}')
+                citac_radku = 1 # jde nahoru
+                citac_sloupce = 1 # jde vpravo
+        
+        elif abs(novy_radek - puvodni_radek) == abs(novy_sloupec - puvodni_sloupec):
+            citac_radku = 1 # jde nahoru
+            citac_sloupce = 1 # jde vpravo            
+            if novy_radek - puvodni_radek < 0: # jde dolu
+                citac_radku = -1
+            if novy_sloupec - puvodni_sloupec < 0: # jde vlevo
+                citac_sloupce = -1            
+    
+            for radek, sloupec in zip(range(puvodni_radek+citac_radku, novy_radek+citac_radku,citac_radku), range(puvodni_sloupec+citac_sloupce,novy_sloupec+citac_sloupce,citac_sloupce)):
+                testovana_pozice = radek, sloupec
+                print(testovana_pozice)
+                blokujici = sachovnice.figurka_na(testovana_pozice)
+                if blokujici != None:
+                    raise ValueError(f'V cestě je {blokujici}')         
+        else:
+            raise ValueError(f'Musí se hýbat po řádku nebo sloupci nebo diagonálně')
+
 class Sachovnice:
     def __init__(self):
         self.vybrana_pozice = None
@@ -160,7 +218,7 @@ class Sachovnice:
         self.pridej((0, 0), Vez('bily'))
         self.pridej((0, 1), Kun('bily'))
         self.pridej((0, 2), Strelec('bily'))
-        self.pridej((0, 3), Figurka('bily', 'dama'))
+        self.pridej((0, 3), Dama('bily'))
         self.pridej((0, 4), Kral('bily'))
         self.pridej((0, 5), Strelec('bily'))
         self.pridej((0, 6), Kun('bily'))
@@ -187,7 +245,7 @@ class Sachovnice:
         self.pridej((7, 0), Vez('cerny'))
         self.pridej((7, 1), Kun('cerny'))
         self.pridej((7, 2), Strelec('cerny'))
-        self.pridej((7, 3), Figurka('cerny', 'dama'))
+        self.pridej((7, 3), Dama('cerny'))
         self.pridej((7, 4), Kral('cerny'))
         self.pridej((7, 5), Strelec('cerny'))
         self.pridej((7, 6), Kun('cerny'))
