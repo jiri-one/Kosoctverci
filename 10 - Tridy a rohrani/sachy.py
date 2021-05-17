@@ -95,8 +95,10 @@ class Kun(Figurka):
         puvodni_radek, puvodni_sloupec = puvodni_pozice
         novy_radek, novy_sloupec = nova_pozice
 
-
-        if (abs(novy_radek - puvodni_radek) == 2 and  abs(novy_sloupec - puvodni_sloupec) == 1) or (abs(novy_radek - puvodni_radek) == 1 and  abs(novy_sloupec - puvodni_sloupec) == 2):
+        vzdalenost_v_radcich = abs(novy_radek - puvodni_radek)
+        vzdalenost_ve_sloupcich = abs(novy_sloupec - puvodni_sloupec)        
+        if ((vzdalenost_v_radcich == 2 and vzdalenost_ve_sloupcich == 1)
+        or (vzdalenost_v_radcich == 1 and vzdalenost_ve_sloupcich == 2)):
             pass
         else:
             raise ValueError(f'Musí se hýbat pouze po trajektorii písmene L a nožička musí být 2 pole dlouhá :-)')
@@ -137,12 +139,12 @@ class Strelec(Figurka):
         citac_radku = 1 # jde nahoru
         citac_sloupce = 1 # jde vpravo
         if abs(novy_radek - puvodni_radek) == abs(novy_sloupec - puvodni_sloupec):
-            if novy_radek - puvodni_radek < 0: # jde dolu
+            if puvodni_radek > novy_radek: # jde dolu
                 citac_radku = -1
-            if novy_sloupec - puvodni_sloupec < 0: # jde vlevo
+            if puvodni_sloupec > novy_sloupec: # jde vlevo
                 citac_sloupce = -1            
             
-            for radek, sloupec in zip(range(puvodni_radek+citac_radku, novy_radek+citac_radku,citac_radku), range(puvodni_sloupec+citac_sloupce,novy_sloupec+citac_sloupce,citac_sloupce)):
+            for radek, sloupec in zip(range(puvodni_radek+citac_radku, novy_radek,citac_radku), range(puvodni_sloupec+citac_sloupce,novy_sloupec,citac_sloupce)):
                     testovana_pozice = radek, sloupec
                     print(testovana_pozice)
                     blokujici = sachovnice.figurka_na(testovana_pozice)
@@ -200,7 +202,7 @@ class Dama(Figurka):
             if novy_sloupec - puvodni_sloupec < 0: # jde vlevo
                 citac_sloupce = -1            
     
-            for radek, sloupec in zip(range(puvodni_radek+citac_radku, novy_radek+citac_radku,citac_radku), range(puvodni_sloupec+citac_sloupce,novy_sloupec+citac_sloupce,citac_sloupce)):
+            for radek, sloupec in zip(range(puvodni_radek+citac_radku, novy_radek,citac_radku), range(puvodni_sloupec+citac_sloupce,novy_sloupec,citac_sloupce)):
                 testovana_pozice = radek, sloupec
                 print(testovana_pozice)
                 blokujici = sachovnice.figurka_na(testovana_pozice)
