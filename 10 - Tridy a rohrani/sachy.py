@@ -212,6 +212,7 @@ class Dama(Figurka):
 class Sachovnice:
     def __init__(self):
         self.vybrana_pozice = None
+        self.hrac_na_tahu = "bily" # !!! ZMĚNA ZDE !!!
 
         self.figurky = {}
 
@@ -293,12 +294,16 @@ class Sachovnice:
 
     def vyber_pozici(self, pozice):
         """Vybere figurku na dané pozici"""
-
+        
         figurka = self.figurka_na(pozice)
-        if figurka:
-            self.vybrana_pozice = pozice
-        else:
-            self.vybrana_pozice = None
+        if figurka.strana != self.hrac_na_tahu: # !!! ZMĚNA ZDE !!!
+            print("Nejsi na tahu") # !!! ZMĚNA ZDE !!!
+            self.vybrana_pozice = None # !!! ZMĚNA ZDE !!!
+        else: # !!! ZMĚNA ZDE !!!
+            if figurka:
+                self.vybrana_pozice = pozice
+            else:
+                self.vybrana_pozice = None
 
     def tahni_na_pozici(self, pozice):
         """Táhne vybranou figurkou na danou pozici"""
@@ -317,7 +322,11 @@ class Sachovnice:
         else:
             print(f'{figurka} jde z {popis_z} na {popis_na}!')
             figurka.tahni(self, self.vybrana_pozice, pozice)
+            barvy = ["cerny", "bily"]  # !!! ZMĚNA ZDE !!!
+            barvy.remove(self.hrac_na_tahu) # !!! ZMĚNA ZDE !!!
+            self.hrac_na_tahu = barvy[0] # !!! ZMĚNA ZDE !!!
         self.vybrana_pozice = None
+        
 
     def vykresli_se(self, kresli_obrazek):
         """Vykreslí šachovnici do Pyglet okýnka
