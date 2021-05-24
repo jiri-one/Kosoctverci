@@ -36,6 +36,7 @@ class Figurka:
 
     def tahni(self, sachovnice, puvodni_pozice, nova_pozice):
         sachovnice.tahni(puvodni_pozice, nova_pozice)
+        
 
 
 class Vez(Figurka):
@@ -214,6 +215,7 @@ class Dama(Figurka):
 class Pesec(Figurka):
     def __init__(self, strana):
         super().__init__(strana, 'pesec')
+        self.prvni_tah = 1
         
     def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
         # (viz dokumentační řetězec v nadtřídě.)
@@ -222,21 +224,31 @@ class Pesec(Figurka):
         # Rozložení pozic (radek, sloupec) na čísla
         puvodni_radek, puvodni_sloupec = puvodni_pozice
         novy_radek, novy_sloupec = nova_pozice
-
+        
         if puvodni_sloupec == novy_sloupec:
-            # Podobně pohyb "vertikálně"
-            if puvodni_radek < novy_radek:
-                preskocene_radky = range(puvodni_radek+1, novy_radek)
+            if self.prvni_tah == 1:
+                if abs(puvodni_radek - novy_radek) <= 2:  
+                    if puvodni_radek < novy_radek:
+                        preskocene_radky = range(puvodni_radek+1, novy_radek)
+                    else:
+                        preskocene_radky = range(novy_radek+1, puvodni_radek)
+                    for radek in preskocene_radky:
+                        testovana_pozice = radek, puvodni_sloupec
+                        blokujici = sachovnice.figurka_na(testovana_pozice)
+                        if blokujici != None:
+                            raise ValueError(f'V cestě je {blokujici}')
+                else:
+                    raise ValueError(f'Smí pouze o jedno nebo (v tomto prvním případě) o dvě pole.')
             else:
-                preskocene_radky = range(novy_radek+1, puvodni_radek)
-            for radek in preskocene_radky:
-                testovana_pozice = radek, puvodni_sloupec
-                blokujici = sachovnice.figurka_na(testovana_pozice)
-                if blokujici != None:
-                    raise ValueError(f'V cestě je {blokujici}')
+                if abs(puvodni_radek - novy_radek) != 1:
+                    raise ValueError(f'Smí pouze o jedno pole.')
 
         else:
             raise ValueError(f'Musí se hýbat po sloupci pokud nebere figuru.')
+    
+    def tahni(self, sachovnice, puvodni_pozice, nova_pozice):
+        super().tahni(sachovnice, puvodni_pozice, nova_pozice) 
+        self.prvni_tah = 0
     
 class Sachovnice:
     def __init__(self):
@@ -244,7 +256,7 @@ class Sachovnice:
         self.hrac_na_tahu = "bily" # !!! ZMĚNA ZDE !!!
 
         self.figurky = {}
-
+        
         self.pridej((0, 0), Vez('bily'))
         self.pridej((0, 1), Kun('bily'))
         self.pridej((0, 2), Strelec('bily'))
