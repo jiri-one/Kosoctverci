@@ -209,6 +209,33 @@ class Dama(Figurka):
         else:
             raise ValueError(f'Musí se hýbat po řádku nebo sloupci nebo diagonálně')
 
+class Pesec(Figurka):
+    def __init__(self, strana):
+        super().__init__(strana, 'pesec')
+        
+    def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
+        # (viz dokumentační řetězec v nadtřídě.)
+        # Nejdřív proveď ověření, která jsou společné všem figurkám
+        super().over_tah(sachovnice, puvodni_pozice, nova_pozice)
+        # Rozložení pozic (radek, sloupec) na čísla
+        puvodni_radek, puvodni_sloupec = puvodni_pozice
+        novy_radek, novy_sloupec = nova_pozice
+
+        if puvodni_sloupec == novy_sloupec:
+            # Podobně pohyb "vertikálně"
+            if puvodni_radek < novy_radek:
+                preskocene_radky = range(puvodni_radek+1, novy_radek)
+            else:
+                preskocene_radky = range(novy_radek+1, puvodni_radek)
+            for radek in preskocene_radky:
+                testovana_pozice = radek, puvodni_sloupec
+                blokujici = sachovnice.figurka_na(testovana_pozice)
+                if blokujici != None:
+                    raise ValueError(f'V cestě je {blokujici}')
+
+        else:
+            raise ValueError(f'Musí se hýbat po sloupci pokud nebere figuru.')
+    
 class Sachovnice:
     def __init__(self):
         self.vybrana_pozice = None
@@ -224,23 +251,23 @@ class Sachovnice:
         self.pridej((0, 6), Kun('bily'))
         self.pridej((0, 7), Vez('bily'))
 
-        self.pridej((1, 0), Figurka('bily', 'pesec'))
-        self.pridej((1, 1), Figurka('bily', 'pesec'))
-        self.pridej((1, 2), Figurka('bily', 'pesec'))
-        self.pridej((1, 3), Figurka('bily', 'pesec'))
-        self.pridej((1, 4), Figurka('bily', 'pesec'))
-        self.pridej((1, 5), Figurka('bily', 'pesec'))
-        self.pridej((1, 6), Figurka('bily', 'pesec'))
-        self.pridej((1, 7), Figurka('bily', 'pesec'))
+        self.pridej((1, 0), Pesec('bily'))
+        self.pridej((1, 1), Pesec('bily'))
+        self.pridej((1, 2), Pesec('bily'))
+        self.pridej((1, 3), Pesec('bily'))
+        self.pridej((1, 4), Pesec('bily'))
+        self.pridej((1, 5), Pesec('bily'))
+        self.pridej((1, 6), Pesec('bily'))
+        self.pridej((1, 7), Pesec('bily'))
 
-        self.pridej((6, 0), Figurka('cerny', 'pesec'))
-        self.pridej((6, 1), Figurka('cerny', 'pesec'))
-        self.pridej((6, 2), Figurka('cerny', 'pesec'))
-        self.pridej((6, 3), Figurka('cerny', 'pesec'))
-        self.pridej((6, 4), Figurka('cerny', 'pesec'))
-        self.pridej((6, 5), Figurka('cerny', 'pesec'))
-        self.pridej((6, 6), Figurka('cerny', 'pesec'))
-        self.pridej((6, 7), Figurka('cerny', 'pesec'))
+        self.pridej((6, 0), Pesec('cerny'))
+        self.pridej((6, 1), Pesec('cerny'))
+        self.pridej((6, 2), Pesec('cerny'))
+        self.pridej((6, 3), Pesec('cerny'))
+        self.pridej((6, 4), Pesec('cerny'))
+        self.pridej((6, 5), Pesec('cerny'))
+        self.pridej((6, 6), Pesec('cerny'))
+        self.pridej((6, 7), Pesec('cerny'))
 
         self.pridej((7, 0), Vez('cerny'))
         self.pridej((7, 1), Kun('cerny'))
