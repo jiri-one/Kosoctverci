@@ -225,7 +225,17 @@ class Pesec(Figurka):
         puvodni_radek, puvodni_sloupec = puvodni_pozice
         novy_radek, novy_sloupec = nova_pozice
         
-        if puvodni_sloupec == novy_sloupec:
+        nepratele = []
+        for nepratelske_koordinaty in [(puvodni_radek+1, puvodni_sloupec+1), 
+                                               (puvodni_radek+1, puvodni_sloupec-1),
+                                               (puvodni_radek-1, puvodni_sloupec+1),
+                                               (puvodni_radek-1, puvodni_sloupec-1)]:
+            potencionalni_nepritel = sachovnice.figurka_na(nepratelske_koordinaty)
+            if potencionalni_nepritel != None:
+                if potencionalni_nepritel.strana != self.strana:
+                    nepratele.append(nepratelske_koordinaty)    
+        
+        if puvodni_sloupec == novy_sloupec or nova_pozice in nepratele:
             if self.prvni_tah == 1:
                 if abs(puvodni_radek - novy_radek) <= 2:  
                     if puvodni_radek < novy_radek:
