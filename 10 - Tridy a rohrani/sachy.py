@@ -227,13 +227,13 @@ class Pesec(Figurka):
         
         nepratele = []
         for nepratelske_koordinaty in [(puvodni_radek+1, puvodni_sloupec+1), 
-                                               (puvodni_radek+1, puvodni_sloupec-1),
-                                               (puvodni_radek-1, puvodni_sloupec+1),
-                                               (puvodni_radek-1, puvodni_sloupec-1)]:
+                                       (puvodni_radek+1, puvodni_sloupec-1),
+                                       (puvodni_radek-1, puvodni_sloupec+1),
+                                       (puvodni_radek-1, puvodni_sloupec-1)]:
             potencionalni_nepritel = sachovnice.figurka_na(nepratelske_koordinaty)
             if potencionalni_nepritel != None:
                 if potencionalni_nepritel.strana != self.strana:
-                    nepratele.append(nepratelske_koordinaty)    
+                    nepratele.append(nepratelske_koordinaty)
         
         if puvodni_sloupec == novy_sloupec or nova_pozice in nepratele:
             if self.prvni_tah == 1:
@@ -252,13 +252,22 @@ class Pesec(Figurka):
             else:
                 if abs(puvodni_radek - novy_radek) != 1:
                     raise ValueError(f'Smí pouze o jedno pole.')
-
+                
+             
+                
         else:
             raise ValueError(f'Musí se hýbat po sloupci pokud nebere figuru.')
     
     def tahni(self, sachovnice, puvodni_pozice, nova_pozice):
         super().tahni(sachovnice, puvodni_pozice, nova_pozice) 
         self.prvni_tah = 0
+        novy_radek, _ = nova_pozice
+        if novy_radek == 7 and self.strana == "bily":
+            sachovnice.figurky.pop(nova_pozice)
+            sachovnice.pridej(nova_pozice, Dama('bily'))
+        if novy_radek == 0 and self.strana == "cerny":
+            sachovnice.figurky.pop(nova_pozice)
+            sachovnice.pridej(nova_pozice, Dama('cerny'))            
     
 class Sachovnice:
     def __init__(self):
