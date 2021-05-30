@@ -42,6 +42,7 @@ class Figurka:
 class Vez(Figurka):
     def __init__(self, strana):
         super().__init__(strana, 'vez')
+        self.prvni_tah = 1 # !!! pridal jsem pouze tohle !!! a ještě jsem "supernul" metodu tahni
 
     def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
         # (viz dokumentační řetězec v nadtřídě.)
@@ -81,6 +82,10 @@ class Vez(Figurka):
                     raise ValueError(f'V cestě je {blokujici}')
         else:
             raise ValueError(f'Musí se hýbat po řádku nebo sloupci')
+    # !!! tedy tuhle metodu !!!    
+    def tahni(self, sachovnice, puvodni_pozice, nova_pozice):
+        super().tahni(sachovnice, puvodni_pozice, nova_pozice) 
+        self.prvni_tah = 0
 
 class Kun(Figurka):
     def __init__(self, strana):
@@ -107,6 +112,11 @@ class Kun(Figurka):
 class Kral(Figurka):
     def __init__(self, strana):
         super().__init__(strana, 'kral')
+        self.prvni_tah = 1
+        self.mala_rosada_bilych = 0
+        self.velka_rosada_bilych = 0
+        self.mala_rosada_cernych = 0
+        self.velka_rosada_cernych = 0
 
     def over_tah(self, sachovnice, puvodni_pozice, nova_pozice):
         # (viz dokumentační řetězec v nadtřídě.)
@@ -117,12 +127,66 @@ class Kral(Figurka):
         # Rozložení pozic (radek, sloupec) na čísla
         puvodni_radek, puvodni_sloupec = puvodni_pozice
         novy_radek, novy_sloupec = nova_pozice
-
-
-        if abs(novy_radek - puvodni_radek) > 1 or abs(novy_sloupec - puvodni_sloupec) > 1:
-            raise ValueError(f'Král dál než o jedno políčko nemůže.')   
-        else:
+        
+        self.pole_rosady = [] 
+        try: # musím ošetřit vyjímku, protože už tam taky možná žádná věž nestojí ... (jsou i jiné způsoby, vím to :-))
+            # malá rošáda bílých
+            if (sachovnice.hrac_na_tahu == "bily" and # zapiseme souradnice rosady pouze tehdy, kdyz je bily na tahu
+                str(sachovnice.figurka_na((0,7))) == '"bily vez"' and # vez je spravne barvy (neni v zasade nutne kontrolovat)
+                sachovnice.figurka_na((0,7)).prvni_tah == 1 and # a jeste nikdy se nepohnula (to je nutne kontrolovat :-D)
+                self.prvni_tah == 1 and # kral se jeste nepohnul
+                sachovnice.figurka_na((0,6)) == None and # a nic nestoji krali v ceste smerem k vezi
+                sachovnice.figurka_na((0,5)) == None ): # a fakt jako vubec nic :)
+                self.pole_rosady.append((0,6)) # tak pridej pole, kam se kral muze hnout do self.pole_rosady
+    
+            # velká rošáda bílých
+            if (sachovnice.hrac_na_tahu == "bily" and # zapiseme souradnice rosady pouze tehdy, kdyz je bily na tahu
+                str(sachovnice.figurka_na((0,0))) == '"bily vez"' and # vez je spravne barvy (neni v zasade nutne kontrolovat)
+                sachovnice.figurka_na((0,0)).prvni_tah == 1 and # a jeste nikdy se nepohnula (to je nutne kontrolovat :-D)          
+                self.prvni_tah == 1 and # kral se jeste nepohnul
+                sachovnice.figurka_na((0,3)) == None and # a nic nestoji krali v ceste smerem k druhe vezi
+                sachovnice.figurka_na((0,2)) == None and # a fakt jako vubec nic :)
+                sachovnice.figurka_na((0,1)) == None ): # a fakt jako vubec, ale vubec, nic :)
+                self.pole_rosady.append((0,2)) # tak pridej pole, kam se kral muze hnout do self.pole_rosady
+            
+            # malá rošáda černých
+            if (sachovnice.hrac_na_tahu == "cerny" and # zapiseme souradnice rosady pouze tehdy, kdyz je cerny na tahu
+                str(sachovnice.figurka_na((7,7))) == '"cerny vez"' and # vez je spravne barvy (neni v zasade nutne kontrolovat)
+                sachovnice.figurka_na((7,7)).prvni_tah == 1 and # a jeste nikdy se nepohnula (to je nutne kontrolovat :-D) 
+                self.prvni_tah == 1 and # kral se jeste nepohnul
+                sachovnice.figurka_na((7,6)) == None and # a nic nestoji krali v ceste smerem k vezi
+                sachovnice.figurka_na((7,5)) == None ): # a fakt jako vubec nic :)
+                self.pole_rosady.append((7,6)) # tak pridej pole, kam se kral muze hnout do self.pole_rosady
+    
+            # velká rošáda černých
+            if (sachovnice.hrac_na_tahu == "cerny" and # zapiseme souradnice rosady pouze tehdy, kdyz je cerny na tahu
+                str(sachovnice.figurka_na((7,0))) == '"cerny vez"' and # vez je spravne barvy (neni v zasade nutne kontrolovat)
+                sachovnice.figurka_na((7,7)).prvni_tah == 1 and # a jeste nikdy se nepohnula (to je nutne kontrolovat :-D) 
+                self.prvni_tah == 1 and # kral se jeste nepohnul
+                sachovnice.figurka_na((7,3)) == None and # a nic nestoji krali v ceste smerem k druhe vezi
+                sachovnice.figurka_na((7,2)) == None and # a fakt jako vubec nic :)
+                sachovnice.figurka_na((7,1)) == None ):# a fakt jako vubec, ale vubec, nic :)
+                self.pole_rosady.append((7,2)) # tak pridej pole, kam se kral muze hnout do self.pole_rosady 
+        except AttributeError:
             pass
+
+        if (abs(novy_radek - puvodni_radek) > 1 or abs(novy_sloupec - puvodni_sloupec) > 1) and nova_pozice not in self.pole_rosady:
+            raise ValueError(f'Král dál než o jedno políčko nemůže. Vyjímkou je rošáda.')
+    
+    def tahni(self, sachovnice, puvodni_pozice, nova_pozice):
+        super().tahni(sachovnice, puvodni_pozice, nova_pozice) 
+        if nova_pozice in self.pole_rosady and self.prvni_tah == 1:
+            if nova_pozice == (0,6):
+                sachovnice.figurka_na((0,7)).tahni(sachovnice,(0,7),(0,5))            
+            elif nova_pozice == (0,2):
+                sachovnice.figurka_na((0,0)).tahni(sachovnice,(0,0),(0,3))  
+            elif nova_pozice == (7,6):
+                sachovnice.figurka_na((7,7)).tahni(sachovnice,(7,7),(7,3)) 
+            elif nova_pozice == (7,2):
+                sachovnice.figurka_na((7,0)).tahni(sachovnice,(7,0),(7,3)) 
+        self.prvni_tah = 0
+        self.pole_rosady = []
+        
 
 class Strelec(Figurka):
     def __init__(self, strana):
@@ -277,39 +341,39 @@ class Sachovnice:
         self.figurky = {}
         
         self.pridej((0, 0), Vez('bily'))
-        self.pridej((0, 1), Kun('bily'))
-        self.pridej((0, 2), Strelec('bily'))
-        self.pridej((0, 3), Dama('bily'))
+        self.pridej((1, 1), Kun('bily'))
+        self.pridej((1, 2), Strelec('bily'))
+        self.pridej((1, 3), Dama('bily'))
         self.pridej((0, 4), Kral('bily'))
-        self.pridej((0, 5), Strelec('bily'))
-        self.pridej((0, 6), Kun('bily'))
+        self.pridej((1, 5), Strelec('bily'))
+        self.pridej((1, 6), Kun('bily'))
         self.pridej((0, 7), Vez('bily'))
 
-        self.pridej((1, 0), Pesec('bily'))
-        self.pridej((1, 1), Pesec('bily'))
-        self.pridej((1, 2), Pesec('bily'))
-        self.pridej((1, 3), Pesec('bily'))
-        self.pridej((1, 4), Pesec('bily'))
-        self.pridej((1, 5), Pesec('bily'))
-        self.pridej((1, 6), Pesec('bily'))
-        self.pridej((1, 7), Pesec('bily'))
+        self.pridej((2, 0), Pesec('bily'))
+        self.pridej((2, 1), Pesec('bily'))
+        self.pridej((2, 2), Pesec('bily'))
+        self.pridej((2, 3), Pesec('bily'))
+        self.pridej((2, 4), Pesec('bily'))
+        self.pridej((2, 5), Pesec('bily'))
+        self.pridej((2, 6), Pesec('bily'))
+        self.pridej((2, 7), Pesec('bily'))
 
-        self.pridej((6, 0), Pesec('cerny'))
-        self.pridej((6, 1), Pesec('cerny'))
-        self.pridej((6, 2), Pesec('cerny'))
-        self.pridej((6, 3), Pesec('cerny'))
-        self.pridej((6, 4), Pesec('cerny'))
-        self.pridej((6, 5), Pesec('cerny'))
-        self.pridej((6, 6), Pesec('cerny'))
-        self.pridej((6, 7), Pesec('cerny'))
+        self.pridej((5, 0), Pesec('cerny'))
+        self.pridej((5, 1), Pesec('cerny'))
+        self.pridej((5, 2), Pesec('cerny'))
+        self.pridej((5, 3), Pesec('cerny'))
+        self.pridej((5, 4), Pesec('cerny'))
+        self.pridej((5, 5), Pesec('cerny'))
+        self.pridej((5, 6), Pesec('cerny'))
+        self.pridej((5, 7), Pesec('cerny'))
 
         self.pridej((7, 0), Vez('cerny'))
-        self.pridej((7, 1), Kun('cerny'))
-        self.pridej((7, 2), Strelec('cerny'))
-        self.pridej((7, 3), Dama('cerny'))
+        self.pridej((6, 1), Kun('cerny'))
+        self.pridej((6, 2), Strelec('cerny'))
+        self.pridej((6, 3), Dama('cerny'))
         self.pridej((7, 4), Kral('cerny'))
-        self.pridej((7, 5), Strelec('cerny'))
-        self.pridej((7, 6), Kun('cerny'))
+        self.pridej((6, 5), Strelec('cerny'))
+        self.pridej((6, 6), Kun('cerny'))
         self.pridej((7, 7), Vez('cerny'))
 
     def figurka_na(self, pozice):
