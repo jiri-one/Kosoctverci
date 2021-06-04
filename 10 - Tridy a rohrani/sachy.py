@@ -181,7 +181,7 @@ class Kral(Figurka):
             elif nova_pozice == (0,2):
                 sachovnice.figurka_na((0,0)).tahni(sachovnice,(0,0),(0,3))  
             elif nova_pozice == (7,6):
-                sachovnice.figurka_na((7,7)).tahni(sachovnice,(7,7),(7,3)) 
+                sachovnice.figurka_na((7,7)).tahni(sachovnice,(7,7),(7,5)) 
             elif nova_pozice == (7,2):
                 sachovnice.figurka_na((7,0)).tahni(sachovnice,(7,0),(7,3)) 
         self.prvni_tah = 0
