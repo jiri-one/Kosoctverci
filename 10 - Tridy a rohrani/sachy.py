@@ -290,37 +290,41 @@ class Pesec(Figurka):
         novy_radek, novy_sloupec = nova_pozice
         
         nepratele = []
-        for nepratelske_koordinaty in [(puvodni_radek+1, puvodni_sloupec+1), 
-                                       (puvodni_radek+1, puvodni_sloupec-1),
-                                       (puvodni_radek-1, puvodni_sloupec+1),
-                                       (puvodni_radek-1, puvodni_sloupec-1)]:
-            potencionalni_nepritel = sachovnice.figurka_na(nepratelske_koordinaty)
-            if potencionalni_nepritel != None:
-                if potencionalni_nepritel.strana != self.strana:
-                    nepratele.append(nepratelske_koordinaty)
+        if self.strana == "bily":
+            for nepratelske_koordinaty in [(puvodni_radek+1, puvodni_sloupec+1), 
+                                           (puvodni_radek+1, puvodni_sloupec-1)]:
+                potencionalni_nepritel = sachovnice.figurka_na(nepratelske_koordinaty)
+                if potencionalni_nepritel:
+                    if potencionalni_nepritel.strana != self.strana:
+                        nepratele.append(nepratelske_koordinaty)
+        else: # self.strana == "cerny"
+            for nepratelske_koordinaty in [(puvodni_radek-1, puvodni_sloupec+1),
+                                           (puvodni_radek-1, puvodni_sloupec-1)]:
+                potencionalni_nepritel = sachovnice.figurka_na(nepratelske_koordinaty)
+                if potencionalni_nepritel:
+                    if potencionalni_nepritel.strana != self.strana:
+                        nepratele.append(nepratelske_koordinaty)            
         
-        if puvodni_sloupec == novy_sloupec or nova_pozice in nepratele:
-            if self.prvni_tah == 1:
-                if abs(puvodni_radek - novy_radek) <= 2:  
-                    if puvodni_radek < novy_radek:
-                        preskocene_radky = range(puvodni_radek+1, novy_radek)
-                    else:
-                        preskocene_radky = range(novy_radek+1, puvodni_radek)
-                    for radek in preskocene_radky:
-                        testovana_pozice = radek, puvodni_sloupec
-                        blokujici = sachovnice.figurka_na(testovana_pozice)
-                        if blokujici != None:
-                            raise ValueError(f'V cestě je {blokujici}')
-                else:
-                    raise ValueError(f'Smí pouze o jedno nebo (v tomto prvním případě) o dvě pole.')
+        if nova_pozice in nepratele:
+            pass
+        elif sachovnice.figurka_na(nova_pozice) == None: 
+            if puvodni_sloupec == novy_sloupec:
+                if self.prvni_tah != 1:
+                    if puvodni_radek + 1 != novy_radek and self.strana == "bily":
+                        raise ValueError('Pesec muze jen po sloupci od jeden radek!')
+                    elif puvodni_radek - 1 != novy_radek and self.strana == "cerny":
+                        raise ValueError('Pesec muze jen po sloupci od jeden radek!')
+                else: # self.prvni_tah == 1
+                    if self.strana == "bily":
+                        if novy_radek - puvodni_radek > 2 or novy_radek < puvodni_radek:
+                            raise ValueError('Pesec muze jen po sloupci od jeden ci dva radky (pouze poprve) DOPREDU!')
+                    else: # self.strana == "cerny"
+                        if puvodni_radek - novy_radek > 2 or novy_radek > puvodni_radek:
+                            raise ValueError('Pesec muze jen po sloupci od jeden ci dva radky (pouze poprve) DOPREDU!')                    
             else:
-                if abs(puvodni_radek - novy_radek) != 1:
-                    raise ValueError(f'Smí pouze o jedno pole.')
-                
-             
-                
+                raise ValueError('Pesec muze jen po sloupci.')
         else:
-            raise ValueError(f'Musí se hýbat po sloupci pokud nebere figuru.')
+            raise ValueError('Sem pesec nesmi!')
     
     def tahni(self, sachovnice, puvodni_pozice, nova_pozice):
         super().tahni(sachovnice, puvodni_pozice, nova_pozice) 
@@ -519,7 +523,7 @@ class Sachovnice:
         radky.append('   a b c d e f g h   ')
         return '\n'.join(radky)
 
-
+round
 def popis_pozici(pozice):
     """Popíše pozici pro lidi
 
