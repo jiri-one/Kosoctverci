@@ -15,6 +15,7 @@ def vyhodnot(tah_hrace, tah_pocitace):
     elif "papír" in volby.keys() and "kámen" in volby.keys():
         print(f"""Papír zabalí kámen! Vyhrává {volby["papír"]}.""")
         return "papír" # přidáno kvůli testování
+
 if __name__ == "__main__":
     while tah_hrace := input("Jaký volíš tah? "):
         tah_pocitace = choice(slova)
