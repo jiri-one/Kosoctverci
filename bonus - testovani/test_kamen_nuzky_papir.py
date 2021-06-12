@@ -1,5 +1,6 @@
 from kamen_nuzky_papir import vyhodnot
 
+# normální testy
 def test_vyhodnot():
 	assert vyhodnot("kámen", "nůžky") == "a"
 	assert vyhodnot("nůžky", "kámen") == "b"
@@ -11,3 +12,8 @@ def test_vyhodnot():
 	assert vyhodnot("papír", "papír") == None
 	assert vyhodnot("nůžky", "nůžky") == None
 
+# negativní testy
+def test2_vyhodnot():
+	assert vyhodnot("papir", "metal") == None
+	assert vyhodnot("papír", "metal") == None
+	assert vyhodnot("metal", "nůžky") == None
