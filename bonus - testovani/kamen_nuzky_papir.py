@@ -8,7 +8,7 @@ def vyhodnot(tah_hrace, tah_pocitace):
         # vyhodnocení případné remízy
         if tah_hrace == tah_pocitace:
             print("Remíza!") # tady předpokládám, že je return None
-        
+
         # vyhodnocení vítěze
         if "kámen" in volby.keys() and "nůžky" in volby.keys():
             print(f"""Kámen tupí nůžky! Vyhrává {volby["kámen"][0]}.""")
