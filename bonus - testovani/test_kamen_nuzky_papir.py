@@ -17,7 +17,8 @@ import pytest
         ("papír", "papír", None),
         ("nůžky", "nůžky", None)
     ])
-def test_vyhodnot(tah_hrace, tah_pocitace, ocekavany_vysledek):
+def test_all_good_options(tah_hrace, tah_pocitace, ocekavany_vysledek):
+    """We are going to test function vyhodnot with all possible good inputs"""
     assert vyhodnot(tah_hrace, tah_pocitace) == ocekavany_vysledek
 
 # NEGATIVNÍNÍ TESTY
@@ -25,7 +26,8 @@ def test_vyhodnot(tah_hrace, tah_pocitace, ocekavany_vysledek):
 # tady všechny vstupy špatně
 @pytest.mark.parametrize("tah_hrace", ("metal", "papir", "kravovina"))
 @pytest.mark.parametrize("tah_pocitace", ("chmm", "juchjuch", "nuzky"))
-def test2_vyhodnot(tah_hrace, tah_pocitace):
+def test_bad_inputs(tah_hrace, tah_pocitace):
+    """We are going to test function vyhodnot with some bad inputs"""
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
 
@@ -33,7 +35,8 @@ def test2_vyhodnot(tah_hrace, tah_pocitace):
 @pytest.mark.parametrize("tah_hrace", ("kámen", "nůžky", "papír"))
 # tady všechny vstupy špatně
 @pytest.mark.parametrize("tah_pocitace", ("chmm", "nevim", "next"))
-def test3_vyhodnot(tah_hrace, tah_pocitace):
+def test_mix_inputs(tah_hrace, tah_pocitace):
+    """We are going to test function vyhodnot with combination of bad and good inputs"""
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
         
@@ -41,7 +44,8 @@ def test3_vyhodnot(tah_hrace, tah_pocitace):
 @pytest.mark.parametrize("tah_pocitace", ("kámen", "nůžky", "papír"))
 # tady všechny vstupy špatně
 @pytest.mark.parametrize("tah_hrace", ("chmm", "nevim", "next"))
-def test3_vyhodnot(tah_hrace, tah_pocitace):
+def test2_mix_inputs(tah_hrace, tah_pocitace):
+    """We are going to test function vyhodnot with another combination of bad and good inputs"""
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
 
