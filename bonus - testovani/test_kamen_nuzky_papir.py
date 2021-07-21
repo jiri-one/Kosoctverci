@@ -19,7 +19,8 @@ import pytest
     ])
 def test_all_good_options(tah_hrace, tah_pocitace, ocekavany_vysledek):
     """We are going to test function vyhodnot with all possible good inputs"""
-    assert vyhodnot(tah_hrace, tah_pocitace) == ocekavany_vysledek
+    vitez, finalni_hlaska = vyhodnot(tah_hrace, tah_pocitace)
+    assert vitez == ocekavany_vysledek
 
 # NEGATIVNÍNÍ TESTY
 
