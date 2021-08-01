@@ -5,22 +5,23 @@ import pytest
 
 # test správných výsledků
 @pytest.mark.parametrize(
-    ("tah_hrace", "tah_pocitace", "ocekavany_vysledek"), 
+    ("tah_hrace", "tah_pocitace", "ocekavany_vysledek", "ocekavana_hlaska"), 
     [
-        ("kámen", "nůžky", "a"),
-        ("nůžky", "kámen", "b"),
-        ("nůžky", "papír", "a"),
-        ("papír", "nůžky", "b"),
-        ("papír", "kámen", "a"),
-        ("kámen", "papír", "b"),
-        ("kámen", "kámen", None),
-        ("papír", "papír", None),
-        ("nůžky", "nůžky", None)
+        ("kámen", "nůžky", "a", "Kámen tupí nůžky! Vyhrává hráč."),
+        ("nůžky", "kámen", "b", "Kámen tupí nůžky! Vyhrává počítač."),
+        ("nůžky", "papír", "a", "Nůžky sříhají papír! Vyhrává hráč."),
+        ("papír", "nůžky", "b", "Nůžky sříhají papír! Vyhrává počítač."),
+        ("papír", "kámen", "a", "Papír zabalí kámen! Vyhrává hráč."),
+        ("kámen", "papír", "b", "Papír zabalí kámen! Vyhrává počítač."),
+        ("kámen", "kámen", None, "Remíza!"),
+        ("papír", "papír", None, "Remíza!"),
+        ("nůžky", "nůžky", None, "Remíza!")
     ])
-def test_all_good_options(tah_hrace, tah_pocitace, ocekavany_vysledek):
+def test_all_good_options(tah_hrace, tah_pocitace, ocekavany_vysledek, ocekavana_hlaska):
     """We are going to test function vyhodnot with all possible good inputs"""
     vitez, finalni_hlaska = vyhodnot(tah_hrace, tah_pocitace)
     assert vitez == ocekavany_vysledek
+    assert finalni_hlaska == ocekavana_hlaska
 
 # NEGATIVNÍNÍ TESTY
 
