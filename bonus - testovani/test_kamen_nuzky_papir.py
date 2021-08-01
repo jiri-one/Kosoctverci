@@ -55,7 +55,11 @@ odpovedi_naopak = ["konec", "kravovina", "kámen", "nůžky", "papír"]
 def falesny_input(otazka):
     return odpovedi_naopak.pop()
 
-volby_knp = ["kámen", "nůžky", "papír"]
+volby_knp = ["kámen", "nůžky", "nůžky"]
 def falesny_choice(pocitac_voli_z):
     return volby_knp.pop()
+
+hlasky = []
+def falesny_print(hlaska):
+    hlasky.append(hlaska)
 
