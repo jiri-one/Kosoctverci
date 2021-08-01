@@ -36,7 +36,7 @@ def test_bad_inputs(tah_hrace, tah_pocitace):
 @pytest.mark.parametrize("tah_hrace", ("kámen", "nůžky", "papír"))
 # tady všechny vstupy špatně
 @pytest.mark.parametrize("tah_pocitace", ("chmm", "nevim", "next"))
-def test_mix_inputs(tah_hrace, tah_pocitace):
+def test_bad_ai_inputs(tah_hrace, tah_pocitace):
     """We are going to test function vyhodnot with combination of bad and good inputs"""
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
@@ -45,7 +45,7 @@ def test_mix_inputs(tah_hrace, tah_pocitace):
 @pytest.mark.parametrize("tah_pocitace", ("kámen", "nůžky", "papír"))
 # tady všechny vstupy špatně
 @pytest.mark.parametrize("tah_hrace", ("chmm", "nevim", "next"))
-def test2_mix_inputs(tah_hrace, tah_pocitace):
+def test_bad_player_inputs(tah_hrace, tah_pocitace):
     """We are going to test function vyhodnot with another combination of bad and good inputs"""
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
