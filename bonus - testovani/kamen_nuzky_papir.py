@@ -24,7 +24,7 @@ def vyhodnot(tah_hrace, tah_pocitace):
     else: # vstup je špatný, není v proměnné slova
         raise ValueError
 
-if __name__ == "__main__":
+def hra():
     while tah_hrace := input("Jaký volíš tah? "):
         try:
             if tah_hrace == "konec":
@@ -36,6 +36,10 @@ if __name__ == "__main__":
                 print(finalni_hlaska)
         except ValueError:
             print(korekce_hrace)
+
+if __name__ == "__main__":
+    hra()
+    
 
 
 
