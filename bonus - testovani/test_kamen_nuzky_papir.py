@@ -51,3 +51,11 @@ def test_bad_player_inputs(tah_hrace, tah_pocitace):
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
 
+odpovedi_naopak = ["konec", "kravovina", "kámen", "nůžky", "papír"]
+def falesny_input(otazka):
+    return odpovedi_naopak.pop()
+
+volby_knp = ["kámen", "nůžky", "papír"]
+def falesny_choice(pocitac_voli_z):
+    return volby_knp.pop()
+
