@@ -1,4 +1,4 @@
-from kamen_nuzky_papir import vyhodnot
+from kamen_nuzky_papir import vyhodnot, hra
 import pytest
 
 # NORMÁLNÍ TESTY
@@ -51,11 +51,11 @@ def test_bad_player_inputs(tah_hrace, tah_pocitace):
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
 
-odpovedi_naopak = ["konec", "kravovina", "kámen", "nůžky", "papír"]
+odpovedi_naopak = ["konec", "kravovina", "kámen", "nůžky" , "papír"]
 def falesny_input(otazka):
     return odpovedi_naopak.pop()
 
-volby_knp = ["kámen", "nůžky", "nůžky"]
+volby_knp = ["", "", "papír", "nůžky", "kámen"]
 def falesny_choice(pocitac_voli_z):
     return volby_knp.pop()
 
@@ -63,3 +63,14 @@ hlasky = []
 def falesny_print(hlaska):
     hlasky.append(hlaska)
 
+def test_fake_game():
+    """We are going to test game with our fake game."""
+    hra(print=falesny_print, input=falesny_input, choice=falesny_choice)
+    
+def test_hlasky_after_game():
+    """We are going to test result from our fake functions."""
+    assert hlasky == ["Papír zabalí kámen! Vyhrává hráč.",
+                      "Remíza!",
+                      "Papír zabalí kámen! Vyhrává počítač.",
+                      "Tenhle program zná jen: kámen, nůžky, papír a nebo konec.",
+                      "Chápu, tahle hra je nuda. Končíme!"]
