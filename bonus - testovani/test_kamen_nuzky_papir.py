@@ -51,8 +51,8 @@ def test_bad_player_inputs(tah_hrace, tah_pocitace):
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
 
-def test_fake_game():
-    """We are going to test game with our fake game."""
+def fake_game():
+    """Only help function to run fake game and get some result which we are going to test."""
     # some fake functions for our main test of fake game
     odpovedi_naopak = ["konec", "kravovina", "kámen", "nůžky" , "papír"]
     def falesny_input(otazka):
@@ -61,18 +61,18 @@ def test_fake_game():
     volby_knp = ["", "", "papír", "nůžky", "kámen"]
     def falesny_choice(pocitac_voli_z):
         return volby_knp.pop()
-    
-    global hlasky
+
     hlasky = []
     def falesny_print(hlaska):
         hlasky.append(hlaska)    
     
     hra(print=falesny_print, input=falesny_input, choice=falesny_choice)
     
+    return hlasky
+    
 def test_hlasky_after_game():
     """We are going to test result from our fake functions."""
-    if "hlasky" not in globals():
-        test_fake_game()
+    hlasky = fake_game()
     assert hlasky == ["Papír zabalí kámen! Vyhrává hráč.",
                       "Remíza!",
                       "Papír zabalí kámen! Vyhrává počítač.",
