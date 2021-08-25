@@ -1,4 +1,8 @@
-from kamen_nuzky_papir import vyhodnot, hra
+# this file contains only test functions
+
+from kamen_nuzky_papir import vyhodnot
+from helpers import fake_game
+
 import pytest
 
 # NORMÁLNÍ TESTY
@@ -51,25 +55,6 @@ def test_bad_player_inputs(tah_hrace, tah_pocitace):
     with pytest.raises(ValueError):
         vyhodnot(tah_hrace, tah_pocitace)
 
-def fake_game():
-    """Only help function to run fake game and get some result which we are going to test."""
-    # some fake functions for our main test of fake game
-    odpovedi_naopak = ["konec", "kravovina", "kámen", "nůžky" , "papír"]
-    def falesny_input(otazka):
-        return odpovedi_naopak.pop()
-    
-    volby_knp = ["", "", "papír", "nůžky", "kámen"]
-    def falesny_choice(pocitac_voli_z):
-        return volby_knp.pop()
-
-    hlasky = []
-    def falesny_print(hlaska):
-        hlasky.append(hlaska)    
-    
-    hra(print=falesny_print, input=falesny_input, choice=falesny_choice)
-    
-    return hlasky
-    
 def test_hlasky_after_game():
     """We are going to test result from our fake functions."""
     hlasky = fake_game()

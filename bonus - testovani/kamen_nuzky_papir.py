@@ -1,3 +1,5 @@
+# file (or module) which contains the whole game
+
 from random import choice
 
 slova = ["kámen", "nůžky", "papír"]
